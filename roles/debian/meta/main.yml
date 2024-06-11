@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Jim Tarpley
+  namespace: trippsc2
+  role_name: debian
+  description: This role seals a Debian machine for use as a template.
+
+  license: MIT
+
+  min_ansible_version: '2.14'
+
+  platforms:
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+
+dependencies: []

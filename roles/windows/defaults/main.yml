@@ -1,0 +1,5 @@
+---
+win_is_vagrant: false
+win_set_sshd_manual: false
+win_add_ssh_trusted_ca_cert: false
+win_ssl_ca_certs: []

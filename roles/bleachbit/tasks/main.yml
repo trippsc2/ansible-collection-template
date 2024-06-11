@@ -1,0 +1,10 @@
+---
+- name: Install BleachBit
+  chocolatey.chocolatey.win_chocolatey:
+    name:
+      - vcredist2010
+      - bleachbit.portable
+    state: present
+
+- name: Run clean operation
+  ansible.windows.win_command: "{{ _bleachbit_command }}"

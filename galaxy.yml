@@ -1,0 +1,22 @@
+---
+namespace: trippsc2
+name: template
+version: 1.0.0
+readme: README.md
+authors:
+  - Jim Tarpley
+description: This collection contains roles for sealing machines for use as templates.
+
+license_file: 'LICENSE'
+
+tags: []
+
+dependencies:
+  ansible.windows: ">=1.0.0"
+  chocolatey.chocolatey: ">=1.0.0"
+  community.windows: ">=1.0.0"
+
+repository: https://github.com/trippsc2/ansible-collection-testing.git
+
+build_ignore:
+  - .gitignore

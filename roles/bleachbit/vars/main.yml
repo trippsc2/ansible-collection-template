@@ -1,0 +1,2 @@
+---
+_bleachbit_command: "C:\\ProgramData\\chocolatey\\bin\\bleachbit_console.exe --clean {{ bleachbit_options | join(' ') }}"

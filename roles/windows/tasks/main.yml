@@ -1,0 +1,180 @@
+- name: Create vagrant user
+  when:
+    - win_is_vagrant
+  block:
+    - name: Set hostname
+      ansible.windows.win_hostname:
+        name: "{{ win_target_hostname }}"
+
+    - name: Ensure vagrant user is present
+      ansible.windows.win_user:
+        name: vagrant
+        password: SecurePassword123!
+        password_never_expires: true
+        groups:
+          - Users
+          - Administrators
+        update_password: on_create
+        state: present
+
+    - name: Ensure vagrant user profile is present
+      community.windows.win_user_profile:
+        username: vagrant
+        name: vagrant
+        state: present
+
+    - name: Ensure .ssh folder is present
+      ansible.windows.win_file:
+        path: C:\Users\vagrant\.ssh
+        state: directory
+
+    - name: Ensure authorized_keys file is present
+      ansible.windows.win_copy:
+        src: authorized_keys
+        dest: C:\Users\vagrant\.ssh\authorized_keys
+    
+    - name: Ensure authorized_keys file does not inherit ACE
+      ansible.windows.win_acl_inheritance:
+        path: C:\Users\vagrant\.ssh\authorized_keys
+        state: absent
+        reorganize: true
+    
+    - name: Ensure Administrators group does not have access to authorized_keys file
+      ansible.windows.win_acl:
+        path: C:\Users\vagrant\.ssh\authorized_keys
+        user: Administrators
+        rights: FullControl
+        type: allow
+        state: absent
+
+    - name: Ensure SYSTEM user has FullControl access to authorized_keys file
+      ansible.windows.win_acl:
+        path: C:\Users\vagrant\.ssh\authorized_keys
+        user: SYSTEM
+        rights: FullControl
+        type: allow
+        state: present
+
+    - name: Ensure local vagrant user has FullControl access to authorized_keys file
+      ansible.windows.win_acl:
+        path: C:\Users\vagrant\.ssh\authorized_keys
+        user: vagrant
+        rights: FullControl
+        type: allow
+        state: present
+
+- name: Set OpenSSH service to Manual
+  when:
+    - win_set_sshd_manual
+  ansible.windows.win_service:
+    name: sshd
+    start_mode: manual
+
+- name: Install SSH trusted CA certificate
+  when:
+    - win_add_ssh_trusted_ca_cert
+  block:
+    - name: Copy trusted CA certificate to machine
+      ansible.windows.win_copy:
+        src: "{{ win_ssh_trusted_ca_cert_path }}"
+        dest: C:\ProgramData\ssh\trusted-user-ca-key.pem
+    
+    - name: Configure SSH to use trusted CA certificate
+      community.windows.win_lineinfile:
+        path: C:\ProgramData\ssh\sshd_config
+        line: TrustedUserCAKeys __PROGRAMDATA__/ssh/trusted-user-ca-key.pem
+        state: present
+
+- name: Copy CA certificates to machine
+  loop: "{{ win_ssl_ca_certs }}"
+  ansible.windows.win_copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+
+- name: Install CA certificates
+  loop: "{{ win_ssl_ca_certs }}"
+  ansible.windows.win_certificate_store:
+    file_type: pem
+    path: "{{ item.dest }}"
+    store_location: LocalMachine
+    store_name: "{{ item.store_name }}"
+    state: present  
+
+- name: Remove host key
+  loop:
+    - C:\ProgramData\ssh\ssh_host_dsa_key
+    - C:\ProgramData\ssh\ssh_host_dsa_key.pub
+    - C:\ProgramData\ssh\ssh_host_rsa_key
+    - C:\ProgramData\ssh\ssh_host_rsa_key.pub
+    - C:\ProgramData\ssh\ssh_host_ecdsa_key
+    - C:\ProgramData\ssh\ssh_host_ecdsa_key.pub
+    - C:\ProgramData\ssh\ssh_host_ed25519_key
+    - C:\ProgramData\ssh\ssh_host_ed25519_key.pub
+  ansible.windows.win_file:
+    path: "{{ item }}"
+    state: absent
+
+- name: List all files in the directories to be cleared
+  ansible.windows.win_find:
+    paths:
+      - C:\Windows\logs
+      - C:\Windows\panther
+      - C:\Windows\temp
+    hidden: true
+    get_checksum: false
+    file_type: file
+  register: _win_temp_files
+
+- name: List all sub-directories in the directories to be cleared
+  ansible.windows.win_find:
+    paths:
+      - C:\Windows\logs
+      - C:\Windows\panther
+      - C:\Windows\temp
+    hidden: true
+    get_checksum: false
+    file_type: directory
+  ignore_errors: true
+  register: _win_temp_directories
+
+- name: Delete all files in the directories
+  loop: "{{ _win_temp_files.files }}"
+  ansible.windows.win_file:
+    path: "{{ item.path }}"
+    state: absent
+  ignore_errors: true
+  loop_control:
+    label: "{{ item.path }}"
+  tags:
+    - always
+    - skip_ansible_lint
+
+- name: Delete all sub-directories in the directories
+  loop: "{{ _win_temp_directories.files }}"
+  ansible.windows.win_file:
+    path: "{{ item.path }}"
+    state: absent
+  ignore_errors: true
+  loop_control:
+    label: "{{ item.path }}"
+  tags:
+    - always
+    - skip_ansible_lint
+
+- name: Clean-up Windows Update cache
+  ansible.windows.win_command: dism.exe /online /cleanup-image /startcomponentcleanup /resetbase
+  changed_when: true
+
+- name: Include trippsc2.template.bleachbit role
+  ansible.builtin.include_role:
+    name: trippsc2.template.bleachbit
+
+- name: Optimize storage
+  ansible.windows.win_command: 'defrag.exe C: /H'
+  changed_when: true
+
+- name: Clear all event logs
+  ansible.windows.win_powershell:
+    script: |
+      Get-EventLog -LogName * | ForEach { Clear-EventLog $_.Log }
+  changed_when: true

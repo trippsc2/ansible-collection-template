@@ -1,0 +1,6 @@
+---
+- name: Update SSL CA certificates
+  listen: _rhel_update_ca_trust
+  become: true
+  ansible.builtin.command: update-ca-trust
+  changed_when: true

@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Jim Tarpley
+  namespace: trippsc2
+  role_name: bleachbit
+  description: This role runs Bleachbit from a portable executable on Windows systems.
+  license: MIT
+
+  min_ansible_version: '2.14'
+
+  platforms:
+  - name: Windows
+    versions:
+      - '2019'
+      - '2022'
+
+collections:
+  - ansible.windows
+  - chocolatey.chocolatey
+
+dependencies: []

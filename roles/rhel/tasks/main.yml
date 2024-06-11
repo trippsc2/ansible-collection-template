@@ -1,0 +1,167 @@
+---
+- name: Set hostname
+  become: true
+  ansible.builtin.hostname:
+    name: "{{ rhel_target_hostname }}"
+
+- name: Add SSH public key to vagrant user
+  when:
+    - rhel_is_vagrant
+  block:
+    - name: Ensure /home/vagrant/.ssh directory is present
+      ansible.builtin.file:
+        path: /home/vagrant/.ssh
+        owner: vagrant
+        group: vagrant
+        mode: '0750'
+        state: directory
+
+    - name: Ensure authorized_keys file is present
+      ansible.builtin.copy:
+        src: authorized_keys
+        dest: /home/vagrant/.ssh/authorized_keys
+        owner: vagrant
+        group: vagrant
+        mode: '0600'
+
+- name: Add SSH trusted CA certificate
+  when:
+    - rhel_add_ssh_trusted_ca_cert
+  block:
+    - name: Copy SSH trusted CA certificate
+      become: true
+      ansible.builtin.copy:
+        src: "{{ rhel_ssh_trusted_ca_cert_path }}"
+        dest: /etc/ssh/trusted-user-ca-key.pem
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Add SSH trusted CA certificate to sshd_config
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?TrustedUserCAKeys'
+        line: "TrustedUserCAKeys /etc/ssh/trusted-user-ca-key.pem"
+        state: present
+
+- name: Add SSL CA certificates
+  when:
+    - rhel_ssl_ca_certificates | length > 0
+  loop: "{{ rhel_ssl_ca_certificates }}"
+  become: true
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /etc/pki/ca-trust/source/anchors/
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - _rhel_update_ca_trust
+
+- name: Install cloud-init
+  when:
+    - rhel_install_cloud_init
+  block:
+    - name: Install cloud-init
+      become: true
+      ansible.builtin.dnf:
+        name:
+          - cloud-init
+        state: present
+
+    - name: Configure cloud-init
+      become: true
+      ansible.builtin.copy:
+        content: "manual_cache_clean: True "
+        dest: /etc/cloud/cloud.cfg.d/99-manual.cfg
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Disable NetworkManager-wait-online.service
+      become: true
+      ansible.builtin.systemd_service:
+        name: NetworkManager-wait-online.service
+        enabled: false
+
+- name: Perform autoremove
+  become: true
+  ansible.builtin.dnf:
+    autoremove: true
+
+- name: Remove old kernel versions
+  become: true
+  ansible.builtin.shell: dnf -y remove -y $(dnf repoquery --installonly --latest-limit=-1 -q)
+  changed_when: true
+
+- name: Clean repository caches
+  become: true
+  ansible.builtin.shell: dnf -y clean all  --enablerepo=\*;
+  changed_when: true
+
+- name: Truncate any logs
+  become: true
+  ansible.builtin.shell: find /var/log -type f -exec truncate --size=0 {} \;
+  changed_when: true
+
+- name: Enumerate contents of /tmp and /var/tmp
+  become: true
+  ansible.builtin.find:
+    paths:
+      - /tmp
+      - /var/tmp
+    file_type: any
+    hidden: true
+    recurse: true
+  register: _tmp_contents
+
+- name: Remove all files
+  loop: "{{ _tmp_contents.files }}"
+  become: true
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  ignore_errors: true
+  loop_control:
+    label: "{{ item.path }}"
+  tags:
+    - always
+    - skip_ansible_lint
+
+- name: Remove unnecessary files before shutdown
+  loop:
+    - /etc/ssh/ssh_host_rsa_key
+    - /etc/ssh/ssh_host_rsa_key.pub
+    - /etc/ssh/ssh_host_dsa_key
+    - /etc/ssh/ssh_host_dsa_key.pub
+    - /etc/ssh/ssh_host_ecdsa_key
+    - /etc/ssh/ssh_host_ecdsa_key.pub
+    - /etc/ssh/ssh_host_ed25519_key
+    - /etc/ssh/ssh_host_ed25519_key.pub
+    - /var/lib/systemd/random-seed
+    - /root/anaconda-ks.cfg
+    - /root/original-ks.cfg
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+
+- name: Remove netplan machine ID
+  become: true
+  ansible.builtin.command: truncate -s 0 /etc/machine-id
+  changed_when: true
+
+- name: Remove unnecessary files before shutdown
+  become: true
+  ansible.builtin.file:
+    path: /root/.wget-hsts
+    state: absent
+
+- name: Set history size to 0
+  become: true
+  ansible.builtin.shell: export HISTSIZE=0
+  changed_when: true
+  tags:
+    - always
+    - skip_ansible_lint

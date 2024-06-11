@@ -1,0 +1,10 @@
+---
+- name: Prepare
+  hosts:
+    - subjects
+  gather_facts: false
+  tasks:
+    - name: Remove existing Chocolatey package
+      chocolatey.chocolatey.win_chocolatey:
+        name: bleachbit.portable
+        state: absent

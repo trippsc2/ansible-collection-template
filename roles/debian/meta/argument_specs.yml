@@ -1,0 +1,38 @@
+---
+argument_specs:
+  main:
+    short_description: Debian Seal for Template
+    description:
+      - This role seals a Debian machine for use as a template.
+    author: Jim Tarpley
+    options:
+      debian_target_hostname:
+        type: str
+        required: true
+        description:
+          - The target hostname.
+      debian_add_ssh_trusted_ca_cert:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether to add a SSH trusted CA certificate.
+      debian_ssh_trusted_ca_cert_path:
+        type: path
+        required: false
+        description:
+          - The path to the SSH trusted CA certificate.
+          - Only needed if `debian_add_ssh_trusted_ca_cert` is `true`.
+      debian_ssl_ca_certificates:
+        type: list
+        required: false
+        default: []
+        description:
+          - List of trusted SSL CA certificates to add.
+      debian_install_cloud_init:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether to install cloud-init.
+          - This is needed for VMware and Nutanix templates.

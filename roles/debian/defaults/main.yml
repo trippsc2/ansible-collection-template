@@ -1,0 +1,5 @@
+---
+debian_is_vagrant: false
+debian_add_ssh_trusted_ca_cert: false
+debian_ssl_ca_certificates: []
+debian_install_cloud_init: false

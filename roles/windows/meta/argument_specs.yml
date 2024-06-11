@@ -1,0 +1,45 @@
+---
+argument_specs:
+  main:
+    short_description: Windows Seal for Template
+    description:
+      - This role seals a Windows machine for use as a template.
+    author:
+      - Jim Tarpley
+    options:
+      win_is_vagrant:
+        description:
+          - Whether the machine is to be used as a Vagrant box.
+        type: bool
+        required: false
+        default: false
+      win_target_hostname:
+        description:
+          - The hostname to set on the machine.
+          - This is only used if the machine is a Vagrant box.
+        type: str
+        required: false
+      win_set_sshd_manual:
+        description:
+          - Whether to set the OpenSSH service to Manual.
+        type: bool
+        required: false
+        default: false
+      win_add_ssh_trusted_ca_cert:
+        description:
+          - Whether to install an SSH trusted CA certificate.
+        type: bool
+        required: false
+        default: false
+      win_ssh_trusted_ca_cert_path:
+        description:
+          - The path to the SSH trusted CA certificate.
+          - This is only used if an SSH trusted CA certificate is to be installed.
+        type: str
+        required: false
+      win_ssl_ca_certs:
+        description:
+          - A list of SSL CA certificates to install.
+        type: list
+        required: false
+        default: []
