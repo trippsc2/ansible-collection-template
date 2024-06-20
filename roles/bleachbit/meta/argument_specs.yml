@@ -8,7 +8,6 @@ argument_specs:
     options:
       bleachbit_options:
         type: list
-        elements: str
         required: false
         default: 
           - deepscan.cache
@@ -46,6 +45,7 @@ argument_specs:
           - windows_media_player.cache
           - windows_media_player.mru
           - wordpad.mru
+        elements: str
         description:
           - List of BleachBit options to clean.
           - See https://docs.bleachbit.org/doc/cleanerml.html for a list of available options.

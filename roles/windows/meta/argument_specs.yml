@@ -8,38 +8,38 @@ argument_specs:
       - Jim Tarpley
     options:
       win_is_vagrant:
-        description:
-          - Whether the machine is to be used as a Vagrant box.
         type: bool
         required: false
         default: false
+        description:
+          - Whether the machine is to be used as a Vagrant box.
       win_target_hostname:
+        type: str
+        required: false
         description:
           - The hostname to set on the machine.
           - This is only used if the machine is a Vagrant box.
-        type: str
-        required: false
       win_set_sshd_manual:
+        type: bool
+        required: false
+        default: false
         description:
           - Whether to set the OpenSSH service to Manual.
+      win_add_ssh_trusted_ca_cert:
         type: bool
         required: false
         default: false
-      win_add_ssh_trusted_ca_cert:
         description:
           - Whether to install an SSH trusted CA certificate.
-        type: bool
-        required: false
-        default: false
       win_ssh_trusted_ca_cert_path:
+        type: str
+        required: false
         description:
           - The path to the SSH trusted CA certificate.
           - This is only used if an SSH trusted CA certificate is to be installed.
-        type: str
-        required: false
       win_ssl_ca_certs:
-        description:
-          - A list of SSL CA certificates to install.
         type: list
         required: false
         default: []
+        description:
+          - A list of SSL CA certificates to install.
