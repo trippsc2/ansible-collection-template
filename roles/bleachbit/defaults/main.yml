@@ -1,6 +1,6 @@
 ---
 bleachbit_options:
-  - deepscan.cache
+  - deepscan.backup
   - deepscan.ds_store
   - deepscan.thumbs_db
   - deepscan.tmp
@@ -12,6 +12,16 @@ bleachbit_options:
   - internet_explorer.forms
   - internet_explorer.history
   - internet_explorer.logs
+  - microsoft_edge.cache
+  - microsoft_edge.cookies
+  - microsoft_edge.dom
+  - microsoft_edge.form_history
+  - microsoft_edge.history
+  - microsoft_edge.passwords
+  - microsoft_edge.search_engines
+  - microsoft_edge.session
+  - microsoft_edge.site_preferences
+  - microsoft_edge.vacuum
   - paint.mru
   - system.clipboard
   - system.logs
