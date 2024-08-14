@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.template.debian
-Version: 1.0.5
+Version: 1.0.6
 
 This role seals a Debian machine for use as a template.
 
