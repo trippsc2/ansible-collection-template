@@ -4,6 +4,11 @@
   ansible.builtin.hostname:
     name: "{{ debian_target_hostname }}"
     use: debian
+  notify:
+    - _debian_restart_systemd-resolved
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Add SSH public key to vagrant user
   when:
