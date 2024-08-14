@@ -1,9 +1,4 @@
 ---
-- name: Set hostname
-  become: true
-  ansible.builtin.hostname:
-    name: "{{ rhel_target_hostname }}"
-
 - name: Add SSH public key to vagrant user
   when:
     - rhel_is_vagrant
@@ -165,3 +160,9 @@
   tags:
     - always
     - skip_ansible_lint
+
+- name: Set hostname
+  become: true
+  ansible.builtin.hostname:
+    name: "{{ rhel_target_hostname }}"
+    use: systemd

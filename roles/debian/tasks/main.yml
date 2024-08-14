@@ -1,10 +1,4 @@
 ---
-- name: Set hostname
-  become: true
-  ansible.builtin.hostname:
-    name: "{{ debian_target_hostname }}"
-    use: debian
-
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
 
@@ -158,3 +152,9 @@
   tags:
     - always
     - skip_ansible_lint
+
+- name: Set hostname
+  become: true
+  ansible.builtin.hostname:
+    name: "{{ debian_target_hostname }}"
+    use: debian
