@@ -65,20 +65,24 @@
           - cloud-init
         state: present
 
-    - name: Configure cloud-init
-      become: true
-      ansible.builtin.copy:
-        content: "manual_cache_clean: True "
-        dest: /etc/cloud/cloud.cfg.d/99-manual.cfg
-        owner: root
-        group: root
-        mode: '0644'
+    - name: EL 8 only steps
+      when:
+        - ansible_distribution_major_version == '8'
+      block:
+        - name: Configure cloud-init
+          become: true
+          ansible.builtin.copy:
+            content: "manual_cache_clean: True "
+            dest: /etc/cloud/cloud.cfg.d/99-manual.cfg
+            owner: root
+            group: root
+            mode: '0644'
 
-    - name: Disable NetworkManager-wait-online.service
-      become: true
-      ansible.builtin.systemd_service:
-        name: NetworkManager-wait-online.service
-        enabled: false
+        - name: Disable NetworkManager-wait-online.service
+          become: true
+          ansible.builtin.systemd_service:
+            name: NetworkManager-wait-online.service
+            enabled: false
 
 - name: Perform autoremove
   become: true
