@@ -8,3 +8,9 @@
 
 - name: Run clean operation
   ansible.windows.win_command: "{{ _bleachbit_command }}"
+
+- name: Install BleachBit
+  chocolatey.chocolatey.win_chocolatey:
+    name:
+      - bleachbit.portable
+    state: absent
