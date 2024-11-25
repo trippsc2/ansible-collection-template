@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.template.rhel
-Version: 1.0.10
+Version: 1.0.11
 
 This role seals a RHEL-based machine for use as a template.
 

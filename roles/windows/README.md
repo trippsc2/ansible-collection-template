@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.template.windows
-Version: 1.0.10
+Version: 1.0.11
 
 This role seals a Windows machine for use as a template.
 
