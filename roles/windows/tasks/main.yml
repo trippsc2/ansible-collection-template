@@ -166,6 +166,8 @@
   changed_when: true
 
 - name: Include trippsc2.template.bleachbit role
+  when:
+    - win_use_bleachbit
   ansible.builtin.include_role:
     name: trippsc2.template.bleachbit
 

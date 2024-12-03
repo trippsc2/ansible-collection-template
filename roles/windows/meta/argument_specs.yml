@@ -43,3 +43,9 @@ argument_specs:
         default: []
         description:
           - A list of SSL CA certificates to install.
+      win_use_bleachbit:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to use BleachBit to clean up the machine.
