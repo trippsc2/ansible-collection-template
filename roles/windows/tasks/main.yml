@@ -63,13 +63,6 @@
         type: allow
         state: present
 
-- name: Set OpenSSH service to Manual
-  when:
-    - win_set_sshd_manual
-  ansible.windows.win_service:
-    name: sshd
-    start_mode: manual
-
 - name: Install SSH trusted CA certificate
   when:
     - win_add_ssh_trusted_ca_cert
@@ -99,20 +92,6 @@
     store_location: LocalMachine
     store_name: "{{ item.store_name }}"
     state: present  
-
-- name: Remove host key
-  loop:
-    - C:\ProgramData\ssh\ssh_host_dsa_key
-    - C:\ProgramData\ssh\ssh_host_dsa_key.pub
-    - C:\ProgramData\ssh\ssh_host_rsa_key
-    - C:\ProgramData\ssh\ssh_host_rsa_key.pub
-    - C:\ProgramData\ssh\ssh_host_ecdsa_key
-    - C:\ProgramData\ssh\ssh_host_ecdsa_key.pub
-    - C:\ProgramData\ssh\ssh_host_ed25519_key
-    - C:\ProgramData\ssh\ssh_host_ed25519_key.pub
-  ansible.windows.win_file:
-    path: "{{ item }}"
-    state: absent
 
 - name: List all files in the directories to be cleared
   ansible.windows.win_find:
@@ -170,6 +149,27 @@
     - win_use_bleachbit
   ansible.builtin.include_role:
     name: trippsc2.template.bleachbit
+
+- name: Remove host key
+  loop:
+    - C:\ProgramData\ssh\ssh_host_dsa_key
+    - C:\ProgramData\ssh\ssh_host_dsa_key.pub
+    - C:\ProgramData\ssh\ssh_host_rsa_key
+    - C:\ProgramData\ssh\ssh_host_rsa_key.pub
+    - C:\ProgramData\ssh\ssh_host_ecdsa_key
+    - C:\ProgramData\ssh\ssh_host_ecdsa_key.pub
+    - C:\ProgramData\ssh\ssh_host_ed25519_key
+    - C:\ProgramData\ssh\ssh_host_ed25519_key.pub
+  ansible.windows.win_file:
+    path: "{{ item }}"
+    state: absent
+
+- name: Set OpenSSH service to Manual
+  when:
+    - win_set_sshd_manual
+  ansible.windows.win_service:
+    name: sshd
+    start_mode: manual
 
 - name: Optimize storage
   ansible.windows.win_command: 'defrag.exe C: /H'
