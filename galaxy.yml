@@ -1,7 +1,7 @@
 ---
 namespace: trippsc2
 name: template
-version: 1.1.1
+version: 1.1.2
 readme: README.md
 authors:
   - Jim Tarpley
@@ -9,7 +9,10 @@ description: This collection contains roles for sealing machines for use as temp
 
 license_file: 'LICENSE'
 
-tags: []
+tags:
+  - infrastructure
+  - linux
+  - windows
 
 dependencies:
   ansible.windows: ">=1.0.0"
