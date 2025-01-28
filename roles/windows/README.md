@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.template.windows
-Version: 1.1.2
+Version: 1.2.0
 
 This role seals a Windows machine for use as a template.
 
@@ -28,6 +28,7 @@ This role seals a Windows machine for use as a template.
 | win_ssh_trusted_ca_cert_path | <p>The path to the SSH trusted CA certificate.</p><p>This is only used if an SSH trusted CA certificate is to be installed.</p> | str | no |  |  |
 | win_ssl_ca_certs | <p>A list of SSL CA certificates to install.</p> | list of '' | no |  | [] |
 | win_use_bleachbit | <p>Whether to use BleachBit to clean up the machine.</p> | bool | no |  | True |
+| win_disable_mouse_acceleration | <p>Whether to disable mouse acceleration.</p> | bool | no |  | True |
 
 
 ## License

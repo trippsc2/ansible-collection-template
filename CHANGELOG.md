@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-01-28
+
+### Role - windows
+
+- Added tasks to disable mouse acceleration.
+
 ## [1.1.2] - 2025-01-08
 
 ### Collection

@@ -180,3 +180,42 @@
     script: |
       Get-EventLog -LogName * | ForEach { Clear-EventLog $_.Log }
   changed_when: true
+
+- name: Disable mouse acceleration
+  when:
+    - win_disable_mouse_acceleration
+  block:
+    - name: Get user registry hives
+      ansible.windows.win_reg_stat:
+        path: HKU:\
+      register: _win_registry_user_hives
+
+    - name: "Set mouse acceleration speed to 0 | {{ item }}"
+      loop: "{{ _win_registry_user_hives.sub_keys }}"
+      when:
+        - "'Classes' not in item"
+      ansible.windows.win_regedit:
+        path: "HKU:\\{{ item }}\\Control Panel\\Mouse"
+        name: MouseSpeed
+        data: '0'
+        type: string
+
+    - name: "Set mouse acceleration 1st threshold to 0 | {{ item }}"
+      loop: "{{ _win_registry_user_hives.sub_keys }}"
+      when:
+        - "'Classes' not in item"
+      ansible.windows.win_regedit:
+        path: "HKU:\\{{ item }}\\Control Panel\\Mouse"
+        name: MouseThreshold1
+        data: '0'
+        type: string
+
+    - name: "Set mouse acceleration 2nd threshold to 0 | {{ item }}"
+      loop: "{{ _win_registry_user_hives.sub_keys }}"
+      when:
+        - "'Classes' not in item"
+      ansible.windows.win_regedit:
+        path: "HKU:\\{{ item }}\\Control Panel\\Mouse"
+        name: MouseThreshold2
+        data: '0'
+        type: string
