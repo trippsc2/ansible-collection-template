@@ -4,7 +4,7 @@ name: template
 version: 1.2.0
 readme: README.md
 authors:
-  - Jim Tarpley (@trippsc2) (@trippsc2)
+  - Jim Tarpley (@trippsc2)
 description: This collection contains roles for sealing machines for use as templates.
 
 license_file: 'LICENSE'
