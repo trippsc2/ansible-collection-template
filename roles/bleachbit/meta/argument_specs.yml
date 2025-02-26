@@ -4,7 +4,7 @@ argument_specs:
     short_description: Bleachbit
     description:
       - This role runs Bleachbit from a portable executable on Windows systems.
-    author: Jim Tarpley
+    author: Jim Tarpley (@trippsc2)
     options:
       bleachbit_options:
         type: list
