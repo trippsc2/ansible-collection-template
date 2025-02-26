@@ -5,7 +5,7 @@ argument_specs:
     description:
       - This role seals a Windows machine for use as a template.
     author:
-      - Jim Tarpley
+      - Jim Tarpley (@trippsc2)
     options:
       win_is_vagrant:
         type: bool
