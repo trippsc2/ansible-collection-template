@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.template.windows
-Version: 1.2.0
+Version: 1.2.1
 
 This role seals a Windows machine for use as a template.
 
@@ -9,7 +9,7 @@ This role seals a Windows machine for use as a template.
 
 | Platform | Versions |
 | -------- | -------- |
-| Windows | <ul><li>2019</li><li>2022</li></ul> |
+| Windows | <ul><li>all</li></ul> |
 
 ## Dependencies
 
@@ -35,5 +35,5 @@ This role seals a Windows machine for use as a template.
 MIT
 
 ## Author and Project Information
-Jim Tarpley
+Jim Tarpley (@trippsc2)
 <!-- END_ANSIBLE_DOCS -->

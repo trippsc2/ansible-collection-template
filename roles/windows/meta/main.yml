@@ -2,7 +2,7 @@
 galaxy_info:
   author: Jim Tarpley (@trippsc2)
   namespace: trippsc2
-  role_name: win_seal_for_template
+  role_name: windows
   description: This role seals a Windows machine for use as a template.
 
   license: MIT
@@ -12,8 +12,7 @@ galaxy_info:
   platforms:
     - name: Windows
       versions:
-        - '2019'
-        - '2022'
+        - all
 
 collections:
   - ansible.windows

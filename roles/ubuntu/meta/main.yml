@@ -2,7 +2,7 @@
 galaxy_info:
   author: Jim Tarpley (@trippsc2)
   namespace: trippsc2
-  role_name: ubuntu_seal_for_template
+  role_name: ubuntu
   description: This role seals an Ubuntu machine for use as a template.
 
   license: MIT
@@ -12,8 +12,8 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - focal
-        - jammy
         - noble
+        - jammy
+        - focal
 
 dependencies: []

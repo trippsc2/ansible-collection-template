@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.template.bleachbit
-Version: 1.2.0
+Version: 1.2.1
 
 This role runs Bleachbit from a portable executable on Windows systems.
 
@@ -28,5 +28,5 @@ This role runs Bleachbit from a portable executable on Windows systems.
 MIT
 
 ## Author and Project Information
-Jim Tarpley
+Jim Tarpley (@trippsc2)
 <!-- END_ANSIBLE_DOCS -->

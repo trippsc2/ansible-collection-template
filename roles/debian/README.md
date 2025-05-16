@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.template.debian
-Version: 1.2.0
+Version: 1.2.1
 
 This role seals a Debian machine for use as a template.
 
@@ -9,7 +9,7 @@ This role seals a Debian machine for use as a template.
 
 | Platform | Versions |
 | -------- | -------- |
-| Debian | <ul><li>bullseye</li><li>bookworm</li></ul> |
+| Debian | <ul><li>bookworm</li></ul> |
 
 ## Dependencies
 
@@ -29,5 +29,5 @@ None.
 MIT
 
 ## Author and Project Information
-Jim Tarpley
+Jim Tarpley (@trippsc2)
 <!-- END_ANSIBLE_DOCS -->

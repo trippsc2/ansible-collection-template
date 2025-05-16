@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.template.ubuntu
-Version: 1.2.0
+Version: 1.2.1
 
 This role seals an Ubuntu machine for use as a template.
 
@@ -9,7 +9,7 @@ This role seals an Ubuntu machine for use as a template.
 
 | Platform | Versions |
 | -------- | -------- |
-| Ubuntu | <ul><li>focal</li><li>jammy</li><li>noble</li></ul> |
+| Ubuntu | <ul><li>noble</li><li>jammy</li><li>focal</li></ul> |
 
 ## Dependencies
 
@@ -29,5 +29,5 @@ None.
 MIT
 
 ## Author and Project Information
-Jim Tarpley
+Jim Tarpley (@trippsc2)
 <!-- END_ANSIBLE_DOCS -->
