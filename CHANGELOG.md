@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.2.1] - 2025-01-28
+## [1.2.1] - 2025-05-16
 
 ### Role - debian
 
