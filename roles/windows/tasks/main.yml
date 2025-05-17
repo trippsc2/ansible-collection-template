@@ -38,7 +38,7 @@
         path: C:\Users\vagrant\.ssh\authorized_keys
         state: absent
         reorganize: true
-    
+
     - name: Ensure Administrators group does not have access to authorized_keys file
       ansible.windows.win_acl:
         path: C:\Users\vagrant\.ssh\authorized_keys
